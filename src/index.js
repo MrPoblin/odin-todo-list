@@ -1,5 +1,5 @@
 import "./styles.css";
-import { displayProjects, displayNotes } from "./display";
+import { displayProjects, displayNotes, setProjectBackground } from "./display";
 
 class Note{
     constructor(title = "", description = "", dueDate = new Date(), priority = "Medium"){
@@ -8,6 +8,7 @@ class Note{
         this.dueDate = dueDate;
         this.priority = priority;
         this.done = false;
+        this.id;
     }
 }
 
@@ -20,7 +21,12 @@ class Project{
         this.id = id;
     }
     add = (note)=>{
+        note.id = this.noteList.length;
         this.noteList.push(note);
+        displayNotes(this);
+    }
+    remove = (index)=>{
+        this.noteList.splice(index, 1);
         displayNotes(this);
     }
 }
@@ -44,13 +50,24 @@ export function checkCheckbox(e){
     if(e.srcElement.dataset.checkbox == "project"){
         ProjectList.list[e.srcElement.dataset.index].done = !ProjectList.list[e.srcElement.dataset.index].done
         displayProjects(ProjectList.list);
-        displayNotes(ProjectList.list[ProjectList.selected]);
+        displaySelectedNotes();
     }
     else if(e.srcElement.dataset.checkbox == "note"){
-
+        ProjectList.list[ProjectList.selected].noteList[e.srcElement.dataset.index].done = !ProjectList.list[ProjectList.selected].noteList[e.srcElement.dataset.index].done
+        displaySelectedNotes();
     }
+}
+
+export function onProjectClicked(projectIndex){
+    ProjectList.selected = projectIndex;
+    displaySelectedNotes();
+}
+
+function displaySelectedNotes(){
+    displayNotes(ProjectList.list[ProjectList.selected]);
 }
 
 ProjectList.add();
 ProjectList.add();
 ProjectList.list[0].add(new Note("I'm a Note! Click me to see the details!", "This is a todo note", new Date(), "Medium"));
+setProjectBackground(ProjectList.selected);

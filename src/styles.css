@@ -138,6 +138,11 @@ input{
   gap: 1rem;
 }
 
+.project-area{
+  padding: 0.1rem .6rem;
+}
+
+
 .project-title{
   flex: 1;
   font-size: var(--title-size);
@@ -152,6 +157,7 @@ input{
   margin-bottom: 1rem;
 }
 
+
 .note-small{
   display: flex;
   align-items: center;
@@ -160,4 +166,9 @@ input{
 
 .note-title{
   flex: 1;
+}
+
+.selected-project{
+  background-color: #292929;
+  border-radius: 0.5rem;
 }

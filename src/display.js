@@ -1,5 +1,5 @@
 import trashImage from "./icons/trash-can-outline.svg";
-import { checkCheckbox } from ".";
+import { checkCheckbox, onProjectClicked } from ".";
 
 export function displayProjects(list){
     const projectList = document.querySelector(".project-list");
@@ -7,6 +7,12 @@ export function displayProjects(list){
     for(let i = 0; i < list.length; i++){
         const projectArea = document.createElement("div");
         projectArea.setAttribute("class", "project-area");
+        projectArea.addEventListener("mouseenter", ()=>{
+            delButton.style.visibility = "visible";
+        })
+        projectArea.addEventListener("mouseleave", ()=>{
+            delButton.style.visibility = "hidden";
+        })
         
         const checkBox = document.createElement("input");
         checkBox.checked = list[i].done;
@@ -19,9 +25,13 @@ export function displayProjects(list){
         button.textContent = list[i].title;
         button.setAttribute("data-index", i);
         button.setAttribute("class", "project-button");
- 
-        
+        button.addEventListener("click", ()=>{
+            onProjectClicked(i);
+            setProjectBackground(i);
+        });
+
         const delButton = document.createElement("img");
+        delButton.style.visibility = "hidden";
         delButton.src = trashImage;
 
         projectArea.appendChild(checkBox);
@@ -29,6 +39,18 @@ export function displayProjects(list){
         projectArea.appendChild(delButton);
 
         projectList.appendChild(projectArea);
+    }
+}
+
+export function setProjectBackground(index){
+    const projects = document.querySelectorAll(".project-area");
+    for(let i = 0; i < projects.length; i++){
+        if(i == index){
+            projects[i].setAttribute("class", "project-area selected-project");
+        }
+        else{
+            projects[i].setAttribute("class", "project-area");
+        }
     }
 }
 
@@ -67,11 +89,13 @@ export function displayNotes(project){
     project.noteList.forEach(element => {
         const note = document.createElement("div");
         note.setAttribute("class", "note-small");
-
         const noteCheckBox = document.createElement("input");
-        noteCheckBox.value = element.done;
+        noteCheckBox.checked = element.done;
         noteCheckBox.setAttribute("type", "checkbox");
         noteCheckBox.setAttribute("class", "note-checkbox");
+        noteCheckBox.setAttribute("data-checkbox", "note");
+        noteCheckBox.setAttribute("data-index", element.id);
+        noteCheckBox.addEventListener("click", checkCheckbox);
 
         const noteTitle = document.createElement("button");
         noteTitle.textContent = element.title;
