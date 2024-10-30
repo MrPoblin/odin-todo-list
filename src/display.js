@@ -1,5 +1,5 @@
 import trashImage from "./icons/trash-can-outline.svg";
-import { checkCheckbox, onProjectClicked, onDelProjectClicked } from ".";
+import { checkCheckbox, onProjectClicked, onDelProjectClicked, addProject } from ".";
 
 export function displayProjects(list){
     const projectList = document.querySelector(".project-list");
@@ -113,9 +113,14 @@ export function displayNotes(project){
 
 }
 
-
 function removeChildren(parent){
     while(parent.hasChildNodes()){
         parent.removeChild(parent.firstChild);
     }
 }
+
+(function () {
+    const newProjectButton = document.querySelector(".new-project");
+    newProjectButton.addEventListener("click", addProject);
+})();
+  

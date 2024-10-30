@@ -84,11 +84,20 @@ function displayProjectList(){
     displayProjects(ProjectList.list);
 }
 
-ProjectList.add();
-ProjectList.add();
-ProjectList.add();
-ProjectList.add();
-ProjectList.add();
+export function addProject(){
+    ProjectList.add();
+    ProjectList.selected = ProjectList.list.length - 1;
+    setProjectBackground(ProjectList.selected);
+    displaySelectedNotes();
+}
+
+
+addProject();
+addProject();
+addProject();
+addProject();
+addProject();
+
 
 ProjectList.list[0].title = "Project 1";
 ProjectList.list[1].title = "Project 2";
