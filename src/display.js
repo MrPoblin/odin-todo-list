@@ -1,5 +1,5 @@
 import trashImage from "./icons/trash-can-outline.svg";
-import { checkCheckbox, onProjectClicked } from ".";
+import { checkCheckbox, onProjectClicked, onDelProjectClicked } from ".";
 
 export function displayProjects(list){
     const projectList = document.querySelector(".project-list");
@@ -32,7 +32,9 @@ export function displayProjects(list){
 
         const delButton = document.createElement("img");
         delButton.style.visibility = "hidden";
+        delButton.setAttribute("data-index", i);
         delButton.src = trashImage;
+        delButton.addEventListener("click", onDelProjectClicked);
 
         projectArea.appendChild(checkBox);
         projectArea.appendChild(button);
@@ -63,52 +65,54 @@ export function displayNotes(project){
     removeChildren(projectDescriptionDiv);
     removeChildren(noteList);
     
-    const projectCheckBox = document.createElement("input");
-    projectCheckBox.setAttribute("type", "checkbox");
-    projectCheckBox.checked = project.done;
-    projectCheckBox.setAttribute("class", "project-checkbox");
-    projectCheckBox.setAttribute("data-checkbox", "project");
-    projectCheckBox.setAttribute("data-index", project.id);
-    projectCheckBox.addEventListener("click", checkCheckbox);
-    
-    const projectTitleInput = document.createElement("input");
-    projectTitleInput.setAttribute("type", "text");
-    projectTitleInput.value = project.title;
-    projectTitleInput.setAttribute("class", "project-title");
+    if(project){
+        const projectCheckBox = document.createElement("input");
+        projectCheckBox.setAttribute("type", "checkbox");
+        projectCheckBox.checked = project.done;
+        projectCheckBox.setAttribute("class", "project-checkbox");
+        projectCheckBox.setAttribute("data-checkbox", "project");
+        projectCheckBox.setAttribute("data-index", project.id);
+        projectCheckBox.addEventListener("click", checkCheckbox);
+        
+        const projectTitleInput = document.createElement("input");
+        projectTitleInput.setAttribute("type", "text");
+        projectTitleInput.value = project.title;
+        projectTitleInput.setAttribute("class", "project-title");
 
-    projectTitle.appendChild(projectCheckBox);
-    projectTitle.appendChild(projectTitleInput);
+        projectTitle.appendChild(projectCheckBox);
+        projectTitle.appendChild(projectTitleInput);
 
-    const projectDescription = document.createElement("input");
-    projectDescription.setAttribute("class", "project-description");
-    projectDescription.setAttribute("type", "text");
-    projectDescription.value = project.description;
+        const projectDescription = document.createElement("input");
+        projectDescription.setAttribute("class", "project-description");
+        projectDescription.setAttribute("type", "text");
+        projectDescription.value = project.description;
 
-    projectDescriptionDiv.appendChild(projectDescription);
+        projectDescriptionDiv.appendChild(projectDescription);
 
-    project.noteList.forEach(element => {
-        const note = document.createElement("div");
-        note.setAttribute("class", "note-small");
-        const noteCheckBox = document.createElement("input");
-        noteCheckBox.checked = element.done;
-        noteCheckBox.setAttribute("type", "checkbox");
-        noteCheckBox.setAttribute("class", "note-checkbox");
-        noteCheckBox.setAttribute("data-checkbox", "note");
-        noteCheckBox.setAttribute("data-index", element.id);
-        noteCheckBox.addEventListener("click", checkCheckbox);
+        project.noteList.forEach(element => {
+            const note = document.createElement("div");
+            note.setAttribute("class", "note-small");
+            const noteCheckBox = document.createElement("input");
+            noteCheckBox.checked = element.done;
+            noteCheckBox.setAttribute("type", "checkbox");
+            noteCheckBox.setAttribute("class", "note-checkbox");
+            noteCheckBox.setAttribute("data-checkbox", "note");
+            noteCheckBox.setAttribute("data-index", element.id);
+            noteCheckBox.addEventListener("click", checkCheckbox);
 
-        const noteTitle = document.createElement("button");
-        noteTitle.textContent = element.title;
-        noteTitle.setAttribute("class", "note-title");
+            const noteTitle = document.createElement("button");
+            noteTitle.textContent = element.title;
+            noteTitle.setAttribute("class", "note-title");
 
-        note.append(noteCheckBox);
-        note.append(noteTitle);
+            note.append(noteCheckBox);
+            note.append(noteTitle);
 
-        noteList.append(note);
-    });
-
+            noteList.append(note);
+        });
+    }
 
 }
+
 
 function removeChildren(parent){
     while(parent.hasChildNodes()){

@@ -106,6 +106,7 @@ input{
     display: flex;
     gap: 0.5rem;
     align-items: center;
+    padding-bottom: 0.5rem;
 }
 
 .projects-title > div{
