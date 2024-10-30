@@ -1,7 +1,7 @@
 import trashImage from "./icons/trash-can-outline.svg";
-import { checkCheckbox, onProjectClicked, onDelProjectClicked, addProject } from ".";
+import { checkCheckbox, onProjectClicked, onDelProjectClicked, addProject, projectNameChanged, projectDescChanged } from ".";
 
-export function displayProjects(list){
+export function displayProjects(list, selected){
     const projectList = document.querySelector(".project-list");
     removeChildren(projectList);
     for(let i = 0; i < list.length; i++){
@@ -42,6 +42,7 @@ export function displayProjects(list){
 
         projectList.appendChild(projectArea);
     }
+    setProjectBackground(selected);
 }
 
 export function setProjectBackground(index){
@@ -78,6 +79,8 @@ export function displayNotes(project){
         projectTitleInput.setAttribute("type", "text");
         projectTitleInput.value = project.title;
         projectTitleInput.setAttribute("class", "project-title");
+        projectTitleInput.setAttribute("data-index", project.id);
+        projectTitleInput.addEventListener("blur", projectNameChanged);
 
         projectTitle.appendChild(projectCheckBox);
         projectTitle.appendChild(projectTitleInput);
@@ -86,6 +89,8 @@ export function displayNotes(project){
         projectDescription.setAttribute("class", "project-description");
         projectDescription.setAttribute("type", "text");
         projectDescription.value = project.description;
+        projectDescription.setAttribute("data-index", project.id);
+        projectDescription.addEventListener("blur", projectDescChanged);
 
         projectDescriptionDiv.appendChild(projectDescription);
 
@@ -103,6 +108,8 @@ export function displayNotes(project){
             const noteTitle = document.createElement("button");
             noteTitle.textContent = element.title;
             noteTitle.setAttribute("class", "note-title");
+            noteTitle.setAttribute("data-index", element.id);
+            
 
             note.append(noteCheckBox);
             note.append(noteTitle);

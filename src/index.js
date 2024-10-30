@@ -36,7 +36,7 @@ let ProjectList = (function () {
     const add = ()=>{
         const newProject = new Project(list.length);
         list.push(newProject);
-        displayProjects(list);
+        displayProjects(list, ProjectList.selected);
     };
     const remove = (id)=>{
         ProjectList.list.splice(id, 1);
@@ -73,7 +73,6 @@ export function onDelProjectClicked(e){
     ProjectList.remove(e.srcElement.dataset.index);
     displayProjectList();
     displaySelectedNotes();
-    setProjectBackground(ProjectList.selected);
 }
 
 function displaySelectedNotes(){
@@ -81,7 +80,7 @@ function displaySelectedNotes(){
 }
 
 function displayProjectList(){
-    displayProjects(ProjectList.list);
+    displayProjects(ProjectList.list, ProjectList.selected);
 }
 
 export function addProject(){
@@ -91,20 +90,20 @@ export function addProject(){
     displaySelectedNotes();
 }
 
+export function projectNameChanged(e){
+    ProjectList.list[e.srcElement.dataset.index].title = e.srcElement.value;
+    displayProjectList()
+    displaySelectedNotes();
+}
+
+export function projectDescChanged(e){
+    ProjectList.list[e.srcElement.dataset.index].description = e.srcElement.value;
+    displaySelectedNotes();
+}
+
 
 addProject();
-addProject();
-addProject();
-addProject();
-addProject();
-
-
 ProjectList.list[0].title = "Project 1";
-ProjectList.list[1].title = "Project 2";
-ProjectList.list[2].title = "Project 3";
-ProjectList.list[3].title = "Project 4";
-ProjectList.list[4].title = "Project 5";
 displayProjectList()
-
+displaySelectedNotes();
 ProjectList.list[0].add(new Note("I'm a Note! Click me to see the details!", "This is a todo note", new Date(), "Medium"));
-setProjectBackground(ProjectList.selected);
