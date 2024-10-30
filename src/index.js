@@ -68,25 +68,30 @@ export function checkCheckbox(e){
         ProjectList.list[ProjectList.selected].noteList[e.srcElement.dataset.index].done = !ProjectList.list[ProjectList.selected].noteList[e.srcElement.dataset.index].done
         displaySelectedNotes();
     }
+    commitToStorage()
 }
 
 export function onProjectClicked(projectIndex){
     ProjectList.selected = projectIndex;
     displaySelectedNotes();
+    commitToStorage()
 }
 
 export function onDelProjectClicked(e){
     ProjectList.remove(e.srcElement.dataset.index);
     displayProjectList();
     displaySelectedNotes();
+    commitToStorage()
 }
 
 export function displaySelectedNotes(){
     displayNotes(ProjectList.list[ProjectList.selected]);
+    commitToStorage()
 }
 
 export function displayProjectList(){
     displayProjects(ProjectList.list, ProjectList.selected);
+    commitToStorage()
 }
 
 export function addProject(){
@@ -94,48 +99,66 @@ export function addProject(){
     ProjectList.selected = ProjectList.list.length - 1;
     setProjectBackground(ProjectList.selected);
     displaySelectedNotes();
+    commitToStorage()
 }
 
 export function addNote(){
 
     ProjectList.list[ProjectList.selected].add(new Note());
-
+    commitToStorage()
 }
 
 export function projectNameChanged(e){
     ProjectList.list[e.srcElement.dataset.index].title = e.srcElement.value;
     displayProjectList()
     displaySelectedNotes();
+    commitToStorage()
 }
 
 export function projectDescChanged(e){
     ProjectList.list[e.srcElement.dataset.index].description = e.srcElement.value;
     displaySelectedNotes();
+    commitToStorage()
 }
 
 export function inputTitle(e){
     ProjectList.list[ProjectList.selected].noteList[e.srcElement.dataset.index].title = e.srcElement.value;
+    commitToStorage()
 }
 
 export function inputDescription(e){
     ProjectList.list[ProjectList.selected].noteList[e.srcElement.dataset.index].description = e.srcElement.value;
+    commitToStorage()
 }
 
 export function inputDate(e){
     ProjectList.list[ProjectList.selected].noteList[e.srcElement.dataset.index].dueDate = e.srcElement.value;
+    commitToStorage()
 }
 
 export function inputPriority(e){
     ProjectList.list[ProjectList.selected].noteList[e.srcElement.dataset.index].priority = e.srcElement.value;
+    commitToStorage()
 }
 
 export function getSelectedNoteValues(index){
     return ProjectList.list[ProjectList.selected].noteList[index].getValues();
 }
 
+function commitToStorage(){
+    const ProjectListSerialized = JSON.stringify(ProjectList);
+    localStorage.setItem("ProjectList", ProjectListSerialized);
+}
 
-addProject();
-ProjectList.list[0].title = "Project 1";
-displayProjectList()
-displaySelectedNotes();
-ProjectList.list[0].add(new Note("I'm a Note! Click me to see the details!", "This is a todo note", "", "Medium"));
+const localStorageData = localStorage.getItem("ProjectList");
+
+if(false){//localStorageData
+    ProjectList = JSON.parse(localStorageData);
+}
+else{
+    addProject();
+    ProjectList.list[0].title = "Project 1";
+    displayProjectList()
+    displaySelectedNotes();
+    ProjectList.list[0].add(new Note("I'm a Note! Click me to see the details!", "This is a todo note", "", "Medium"));
+}

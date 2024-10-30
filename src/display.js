@@ -120,7 +120,6 @@ export function displayNotes(project){
                 noteDate.textContent = date.toLocaleDateString();
             }
             
-
             noteDate.setAttribute("class", "note-date");
             noteDate.setAttribute("data-index", element.id);
             
