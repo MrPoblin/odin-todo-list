@@ -165,11 +165,28 @@ input{
   gap: 0.2rem;
 }
 
-.note-title{
-  flex: 1;
+.note-date{
+  border-left: 1px solid #3f3f3f;
+  padding-left: 0.5rem;
 }
 
 .selected-project{
   background-color: #292929;
   border-radius: 0.5rem;
+}
+
+.edit-window{
+  padding: 1rem;
+  background-color: #080808;
+  -webkit-box-shadow: 0px 10px 13px -7px #3f3f3f, 5px 5px 15px 5px rgba(0, 0, 0, 0); 
+  box-shadow: 0px 10px 13px -7px #3f3f3f, 5px 5px 15px 5px rgba(0,0,0,0);
+  margin: 1rem 0rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.note-list{
+  display: flex;
+  flex-direction: column;
 }

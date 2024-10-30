@@ -2,13 +2,16 @@ import "./styles.css";
 import { displayProjects, displayNotes, setProjectBackground } from "./display";
 
 class Note{
-    constructor(title = "", description = "", dueDate = new Date(), priority = "Medium"){
+    constructor(title = "", description = "", dueDate = "", priority = "Medium"){
         this.title = title;
         this.description = description;
         this.dueDate = dueDate;
         this.priority = priority;
         this.done = false;
         this.id;
+    }
+    getValues(){
+        return [this.title, this.description, this.dueDate, this.priority];
     }
 }
 
@@ -27,6 +30,9 @@ class Project{
     }
     remove = (index)=>{
         this.noteList.splice(index, 1);
+        for(let i = index; i < this.noteList.length; i++){
+            this.noteList[i].id--;
+        }
         displayNotes(this);
     }
 }
@@ -75,11 +81,11 @@ export function onDelProjectClicked(e){
     displaySelectedNotes();
 }
 
-function displaySelectedNotes(){
+export function displaySelectedNotes(){
     displayNotes(ProjectList.list[ProjectList.selected]);
 }
 
-function displayProjectList(){
+export function displayProjectList(){
     displayProjects(ProjectList.list, ProjectList.selected);
 }
 
@@ -88,6 +94,12 @@ export function addProject(){
     ProjectList.selected = ProjectList.list.length - 1;
     setProjectBackground(ProjectList.selected);
     displaySelectedNotes();
+}
+
+export function addNote(){
+
+    ProjectList.list[ProjectList.selected].add(new Note());
+
 }
 
 export function projectNameChanged(e){
@@ -101,9 +113,29 @@ export function projectDescChanged(e){
     displaySelectedNotes();
 }
 
+export function inputTitle(e){
+    ProjectList.list[ProjectList.selected].noteList[e.srcElement.dataset.index].title = e.srcElement.value;
+}
+
+export function inputDescription(e){
+    ProjectList.list[ProjectList.selected].noteList[e.srcElement.dataset.index].description = e.srcElement.value;
+}
+
+export function inputDate(e){
+    ProjectList.list[ProjectList.selected].noteList[e.srcElement.dataset.index].dueDate = e.srcElement.value;
+}
+
+export function inputPriority(e){
+    ProjectList.list[ProjectList.selected].noteList[e.srcElement.dataset.index].priority = e.srcElement.value;
+}
+
+export function getSelectedNoteValues(index){
+    return ProjectList.list[ProjectList.selected].noteList[index].getValues();
+}
+
 
 addProject();
 ProjectList.list[0].title = "Project 1";
 displayProjectList()
 displaySelectedNotes();
-ProjectList.list[0].add(new Note("I'm a Note! Click me to see the details!", "This is a todo note", new Date(), "Medium"));
+ProjectList.list[0].add(new Note("I'm a Note! Click me to see the details!", "This is a todo note", "", "Medium"));
