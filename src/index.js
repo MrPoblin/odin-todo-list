@@ -10,9 +10,11 @@ class Note{
         this.done = false;
         this.id;
     }
-    getValues(){
-        return [this.title, this.description, this.dueDate, this.priority];
-    }
+    
+}
+
+function getValues(note){
+    return [note.title, note.description, note.dueDate, note.priority];
 }
 
 class Project{
@@ -142,7 +144,7 @@ export function inputPriority(e){
 }
 
 export function getSelectedNoteValues(index){
-    return ProjectList.list[ProjectList.selected].noteList[index].getValues();
+    return getValues(ProjectList.list[ProjectList.selected].noteList[index]);
 }
 
 function commitToStorage(){
@@ -152,13 +154,43 @@ function commitToStorage(){
 
 const localStorageData = localStorage.getItem("ProjectList");
 
-if(false){//localStorageData
+if(localStorageData){
     ProjectList = JSON.parse(localStorageData);
+    //Gotta rewrite all of the functions again I guess...
+    ProjectList.remove = (id)=>{
+        ProjectList.list.splice(id, 1);
+        for(let i = id; i < ProjectList.list.length; i++){
+            ProjectList.list[i].id--;
+        }
+        if(ProjectList.selected >= id){
+            ProjectList.selected--;
+            ProjectList.selected = Math.max(0, ProjectList.selected);
+        };
+    }
+    ProjectList.add = ()=>{
+        const newProject = new Project(ProjectList.list.length);
+        ProjectList.list.push(newProject);
+        displayProjects(ProjectList.list, ProjectList.selected);
+    };
+    ProjectList.list.forEach(element => {
+        element.add = (note)=>{
+            note.id = element.noteList.length;
+            element.noteList.push(note);
+            displayNotes(element);
+        };
+        element.remove = (index)=>{
+            element.noteList.splice(index, 1);
+            for(let i = index; i < element.noteList.length; i++){
+                element.noteList[i].id--;
+            }
+            displayNotes(element);
+        };
+    });
 }
 else{
     addProject();
     ProjectList.list[0].title = "Project 1";
-    displayProjectList()
-    displaySelectedNotes();
     ProjectList.list[0].add(new Note("I'm a Note! Click me to see the details!", "This is a todo note", "", "Medium"));
 }
+displayProjectList()
+displaySelectedNotes();
